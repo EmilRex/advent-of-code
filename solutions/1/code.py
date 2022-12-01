@@ -1,27 +1,28 @@
 import typer
 
 
-def main(path: str):
+def main(path: str, top: int = 1):
     loop = 0
     current = 0
-    most = 0
+    most = [0] * top
 
     with open(path, "r") as fh:
         while True:
             loop += 1
             line = fh.readline()
 
-            # Exit condition
-            if line == '':
-                break
-
             # Counter reset
-            if line.strip() == '':
-                if current > most:
-                    most = current
+            if line.strip() == "":
+                if current > min(most):
+                    most[most.index(min(most))] = current
                 print(f"[{loop}] Current: {current}; Most: {most}")
                 current = 0
-                continue
+
+                # Exit condition
+                if line == "":
+                    break
+                else:
+                    continue
 
             # Increment counter
             if line.strip().isnumeric():
@@ -29,8 +30,7 @@ def main(path: str):
             else:
                 raise ValueError(f"Unexpected value '{line}' found")
 
-    print(f"\nResult is '{most}'")
-    return most
+    print(f"\n Sum of top {top} is {sum(most)}")
 
 
 if __name__ == "__main__":
