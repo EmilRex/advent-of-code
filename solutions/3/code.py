@@ -6,6 +6,8 @@ PRIORITY_MAP = {
     l: n for l, n in zip(string.ascii_letters, range(1, len(string.ascii_letters) + 1))
 }
 
+app = typer.Typer()
+
 
 def split_compartments(s: str):
     # Check assumtions
@@ -17,8 +19,8 @@ def split_compartments(s: str):
     return s[:half], s[half:]
 
 
-def find_common_item(c1: str, c2: str):
-    items = set(c1).intersection(set(c2))
+def find_common_item(lists: list[str]):
+    items = set.intersection(*[set(l) for l in lists])
 
     assert len(items) == 1
 
@@ -29,7 +31,8 @@ def calculate_priority(item: str):
     return PRIORITY_MAP[item]
 
 
-def main(path: str):
+@app.command()
+def first(path: str):
     loop = 0
     total = 0
 
@@ -42,7 +45,27 @@ def main(path: str):
                 break
 
             c1, c2 = split_compartments(line)
-            item = find_common_item(c1, c2)
+            item = find_common_item([c1, c2])
+            priority = calculate_priority(item)
+
+            total += priority
+            print(f"[{loop}] Item {item} with {priority} total:{total}")
+
+
+@app.command()
+def second(path: str):
+    loop = 0
+    total = 0
+
+    with open(path, "r") as fh:
+        while True:
+            loop += 1
+            lines = [fh.readline().strip() for _ in range(3)]
+
+            if all([l == '' for l in lines]):
+                break
+
+            item = find_common_item(lines)
             priority = calculate_priority(item)
 
             total += priority
@@ -50,4 +73,4 @@ def main(path: str):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
