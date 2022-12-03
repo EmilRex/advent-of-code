@@ -45,7 +45,7 @@ def calculate_score(opp_shape, my_shape, strategy):
         outcome = S2_MAP[my_shape]
         for i, n in OUTCOMES_MAP.items():
             for j, m in n.items():
-                if (j == opp_shape and m == outcome):
+                if j == opp_shape and m == outcome:
                     expected_shape = i
                     break
         shape_points = S1_MAP[expected_shape]
