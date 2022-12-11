@@ -39,28 +39,31 @@ def move_tail(head, tail):
         return (tail[0] + one(horizontal), tail[1] + one(vertical))
 
 
-def main(path: str):
+def main(path: str, knots: int = 1):
     head = (0, 0)
-    tail = (0, 0)
-    positions = defaultdict(int)
-    positions[tail] = 1
+    tails = [(0, 0)] * knots
+    positions = [defaultdict(int) for i in range(knots)]
+    for i in range(knots):
+        positions[i][tails[i]] = 1
 
     with open(path, "r") as fh:
-        for idx, line in enumerate(fh):
+        for line in fh:
             line = line.strip()
             direction, steps = line.split(" ")
             steps = int(steps)
 
             for _ in range(steps):
                 head = move_head(head, direction)
-                tail = move_tail(head, tail)
 
-                positions[tail] += 1
+                for idx in range(knots):
 
-            # Code goes here
-            print(f"[{idx}] '{line}' - head {head} - tail {tail}")
+                    tails[idx] = move_tail([head, *tails][idx], tails[idx])
 
-    print(f"Positions visited: {len(positions)}")
+                print(f"'{line}' - head {head} - tail {tails}")
+                for i, tail in enumerate(tails):
+                    positions[i][tail] += 1
+
+    print(f"Positions visited: {len(positions[-1])}")
 
 
 if __name__ == "__main__":
