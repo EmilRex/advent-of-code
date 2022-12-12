@@ -21,40 +21,37 @@ def load_grid(path: str):
 
 
 def populate_graph(grid):
+    start, end = None, None
     graph = nx.DiGraph()
     for row in range(len(grid)):
         for col in range(len(grid[0])):
             pos = grid[row][col]
             value = MAPPING[pos]
-            if pos in ("S", "E"):
-                name = pos
-            else:
-                name = f"{row},{col}"
+            name = f"{row},{col}"
+            if pos == "S":
+                start = name
+            if pos == "E":
+                end = name
             for horz, vert in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                try:
-                    if (row + horz < 0) or (col + vert < 0):
-                        continue
-                    neighbor_pos = grid[row + horz][col + vert]
-                    neighbor_value = MAPPING[neighbor_pos]
-                    if neighbor_pos in ("S", "E"):
-                        neighbor_name = neighbor_pos
-                        # if neighbor_pos == "E":
-                        #     graph.add_edge(name, neighbor_name)
-                        #     continue
-                    else:
-                        neighbor_name = f"{row + horz},{col + vert}"
-                    if abs(neighbor_value - value) <= 1:
-                        graph.add_edge(name, neighbor_name)
-                        graph.add_edge(neighbor_name, name)
-                except IndexError:
+                if (
+                    (row + horz < 0)
+                    or (col + vert < 0)
+                    or (row + horz >= len(grid))
+                    or (col + vert >= len(grid[0]))
+                ):
                     continue
-    return graph
+                neighbor_pos = grid[row + horz][col + vert]
+                neighbor_value = MAPPING[neighbor_pos]
+                neighbor_name = f"{row + horz},{col + vert}"
+                if neighbor_value - value <= 1:
+                    graph.add_edge(name, neighbor_name)
+    return graph, start, end
 
 
 def main(path: str):
     grid = load_grid(path)
-    graph = populate_graph(grid)
-    length = nx.shortest_path_length(graph, "S", "E")
+    graph, start, end = populate_graph(grid)
+    length = nx.shortest_path_length(graph, start, end)
     print(f"Shortest path length is {length}")
 
 
