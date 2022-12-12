@@ -1,3 +1,5 @@
+import math
+
 import typer
 
 
@@ -12,10 +14,8 @@ def load_grid(path: str):
     return grid
 
 
-def main(path: str):
+def count_visible_trees(grid):
     total = 0
-
-    grid = load_grid(path)
 
     for row in range(1, len(grid) - 1):
         for col in range(1, len(grid) - 1):
@@ -33,10 +33,46 @@ def main(path: str):
                 total += 1
 
     total += (len(grid) * 2) + ((len(grid) - 2) * 2)
-
     print(f"Total visible trees is {total}")
 
-    # print(f"[{idx}] '{line}' - total: {total}")
+
+def find_visibility(current, heights):
+    visibility = 0
+    for height in heights:
+        # Issue here was that I was incrementing after the check
+        visibility += 1
+        if height >= current:
+            break
+    return visibility
+
+
+def find_scenic_score(grid):
+    scores = []
+    for row in range(0, len(grid)):
+        for col in range(0, len(grid)):
+            current = grid[row][col]
+
+            left = [grid[row][c] for c in range(0, col)][::-1]
+            right = [grid[row][c] for c in range(col + 1, len(grid))]
+            up = [grid[r][col] for r in range(0, row)][::-1]
+            down = [grid[r][col] for r in range(row + 1, len(grid))]
+
+            visibilities = [
+                find_visibility(current, item) for item in [left, right, up, down]
+            ]
+            visibility = math.prod(visibilities)
+            scores.append(visibility)
+            print(
+                f"Tree [{row}, {col}] with height {current} has visibility {visibility}"
+            )
+
+    print(f"Highest scenic score is {max(scores)}")
+
+
+def main(path: str):
+    grid = load_grid(path)
+    # count_visible_trees(grid)
+    find_scenic_score(grid)
 
 
 if __name__ == "__main__":
