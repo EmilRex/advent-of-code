@@ -18,6 +18,21 @@ def main(path: str):
         total += idx * sum(operations[:idx])
     print(f"Total: {total}")
 
+    # Render screen
+    screen = []
+    pos = 0
+    for idx in range(240):
+        if sum(operations[: idx + 1]) - 1 <= pos <= sum(operations[: idx + 1]) + 1:
+            screen.append("#")
+        else:
+            screen.append(".")
+        pos += 1
+        if pos == 40:
+            pos = 0
+
+    for i in range(0, 240, 40):
+        print("".join(screen[i : i + 40]))
+
 
 if __name__ == "__main__":
     typer.run(main)
