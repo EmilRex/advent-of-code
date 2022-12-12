@@ -52,7 +52,20 @@ def main(path: str):
     grid = load_grid(path)
     graph, start, end = populate_graph(grid)
     length = nx.shortest_path_length(graph, start, end)
-    print(f"Shortest path length is {length}")
+    print(f"Shortest path from 'S' to 'E' is {length} steps")
+
+    lenghts = []
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            pos = grid[row][col]
+            name = f"{row},{col}"
+
+            if pos == "a":
+                try:
+                    lenghts.append(nx.shortest_path_length(graph, name, end))
+                except Exception:
+                    pass
+    print(f"Shortest path from any 'a' to 'E' is {min(lenghts)}")
 
 
 if __name__ == "__main__":
