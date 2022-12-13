@@ -30,6 +30,7 @@ def compare(left, right):
 def main(path: str):
     idx = 0
     total = 0
+    packets = []
 
     with open(path, "r") as fh:
         while True:
@@ -40,13 +41,29 @@ def main(path: str):
                 break
 
             left, right = eval(left), eval(right)
+
+            packets.extend([left, right])
+
             correct = compare(left, right)
             if correct:
                 total += idx
 
             print(f"[{idx}] {correct} - {left}, {right}")
 
-    print(f"Total is {total}")
+    print(f"Total is {total}\n")
+
+    # Sort packets
+    ordered = [[[2]], [[6]]]
+    for packet in packets:
+        for idx, item in enumerate(ordered):
+            if compare(packet, item):
+                ordered.insert(idx, packet)
+                break
+        else:
+            ordered.append(packet)
+
+    print(f"Index for [[2]] is {ordered.index([[2]]) + 1}")
+    print(f"Index for [[6]] is {ordered.index([[6]]) + 1}")
 
 
 if __name__ == "__main__":
