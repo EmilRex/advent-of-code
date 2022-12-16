@@ -36,15 +36,24 @@ def visualize_grid(grid):
         print(f"[{y:3}]", "".join([grid[(x, y)] for x in range(x_min - 1, x_max + 1)]))
 
 
-def fill_grid(grid):
+def fill_grid(grid, floor: bool):
     abyss_start = max([k[1] for k in grid])
     total = 0
     x, y = 500, 0
 
     while True:
-        # Exit condition
-        if y > abyss_start:
+        # Exit condition(s)
+        if grid[x, y] == "o":
             return total
+
+        if y > abyss_start:
+            if floor:
+                grid[(x, y)] = "o"
+                x, y = 500, 0
+                total += 1
+                continue
+            else:
+                return total
 
         # Current grain path
         if grid[(x, y + 1)] == ".":
@@ -65,13 +74,13 @@ def fill_grid(grid):
             continue
 
 
-def main(path: str):
+def main(path: str, floor: bool):
     # Construct the grid
     grid = construct_grid(path)
     # Visualize grid
     visualize_grid(grid)
     # Fill with sand
-    total = fill_grid(grid)
+    total = fill_grid(grid, floor)
     visualize_grid(grid)
     print(f"Total is {total}")
 
