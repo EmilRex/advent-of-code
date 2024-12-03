@@ -45,12 +45,16 @@ def main(path: str, strategy: int):
             if line == "":
                 break
 
-            if not "move" in line:
+            if "move" not in line:
                 print(f"Skipping line: {line}")
                 continue
 
             parts = line.split(" ")
-            n, _from, _to, = (
+            (
+                n,
+                _from,
+                _to,
+            ) = (
                 int(parts[1]),
                 int(parts[3]),
                 int(parts[5]),

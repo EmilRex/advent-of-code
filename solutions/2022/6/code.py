@@ -8,7 +8,6 @@ data = "hqhnqhqshhslswsffchfcfbblvlblqlggfwwqfwwqdddbbbhzhjjrqjqbjqjwqjwqwhwrrmc
 
 def main(n: int):
     for i, c in enumerate(data):
-
         queue.append(c)
         print(f"[{i + 1}]: {queue}")
 

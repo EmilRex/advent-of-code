@@ -56,7 +56,6 @@ def main(path: str, knots: int = 1):
                 head = move_head(head, direction)
 
                 for idx in range(knots):
-
                     tails[idx] = move_tail([head, *tails][idx], tails[idx])
 
                 print(f"'{line}' - head {head} - tail {tails}")

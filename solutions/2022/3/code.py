@@ -3,7 +3,7 @@ import string
 import typer
 
 PRIORITY_MAP = {
-    l: n for l, n in zip(string.ascii_letters, range(1, len(string.ascii_letters) + 1))
+    letter: n for letter, n in zip(string.ascii_letters, range(1, len(string.ascii_letters) + 1))
 }
 
 app = typer.Typer()
@@ -20,7 +20,7 @@ def split_compartments(s: str):
 
 
 def find_common_item(lists: list[str]):
-    items = set.intersection(*[set(l) for l in lists])
+    items = set.intersection(*[set(_list) for _list in lists])
 
     assert len(items) == 1
 
@@ -62,7 +62,7 @@ def second(path: str):
             loop += 1
             lines = [fh.readline().strip() for _ in range(3)]
 
-            if all([l == '' for l in lines]):
+            if all([line == "" for line in lines]):
                 break
 
             item = find_common_item(lines)

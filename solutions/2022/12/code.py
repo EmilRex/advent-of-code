@@ -4,8 +4,8 @@ import networkx as nx
 import typer
 
 MAPPING = {
-    l: n
-    for l, n in zip(string.ascii_lowercase, range(1, len(string.ascii_lowercase) + 1))
+    letter: n
+    for letter, n in zip(string.ascii_lowercase, range(1, len(string.ascii_lowercase) + 1))
 }
 MAPPING["S"] = 1
 MAPPING["E"] = 26

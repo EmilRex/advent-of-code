@@ -29,7 +29,7 @@ def count_visible_trees(grid):
             )
 
             if any([v_left, v_right, v_up, v_down]):
-                print(f"\tTree is visible")
+                print("\tTree is visible")
                 total += 1
 
     total += (len(grid) * 2) + ((len(grid) - 2) * 2)
